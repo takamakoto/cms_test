@@ -17,6 +17,17 @@ if ( !defined('ABSPATH') )
  */
 global $post_type, $post_type_object, $post;
 
+if ( is_multisite() ) {
+	add_action( 'admin_footer', '_admin_notice_post_locked' );
+} else {
+	$check_users = get_users( array( 'fields' => 'ID', 'number' => 2 ) );
+
+	if ( count( $check_users ) > 1 )
+		add_action( 'admin_footer', '_admin_notice_post_locked' );
+
+	unset( $check_users );
+}
+
 wp_enqueue_script('post');
 $_wp_editor_expand = $_content_editor_dfw = false;
 
@@ -185,6 +196,7 @@ $form_extra = '';
 if ( 'auto-draft' == $post->post_status ) {
 	if ( 'edit' == $action )
 		$post->post_title = '';
+		$post->post_email = '';
 	$autosave = false;
 	$form_extra .= "<input type='hidden' id='auto_draft' name='auto_draft' value='1' />";
 } else {
@@ -562,6 +574,22 @@ do_action( 'edit_form_top', $post ); ?>
 	<label class="screen-reader-text" id="title-prompt-text" for="title"><?php echo $title_placeholder; ?></label>
 	<input type="text" name="post_title" size="30" value="<?php echo esc_attr( $post->post_title ); ?>" id="title" spellcheck="true" autocomplete="off" />
 </div>
+
+<div id="titlewrap">
+	<?php
+	/**
+	 * Filters the title field placeholder text.
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param string  $text Placeholder text. Default 'Enter email here'.
+	 * @param WP_Post $post Post object.
+	 */
+	$email_placeholder = apply_filters( 'enter_email_here', __( 'Enter email here' ), $post );
+	?>
+	<label class="screen-reader-text" id="email-prompt-text" for="email"><?php echo $email_placeholder; ?></label>
+	<input type="text" name="post_email" size="30" value="<?php echo esc_attr( $post->post_email ); ?>" id="email" spellcheck="true" autocomplete="off" />
+</div>
 <?php
 /**
  * Fires before the permalink field in the edit form.
@@ -604,6 +632,7 @@ endif;
 wp_nonce_field( 'samplepermalink', 'samplepermalinknonce', false );
 ?>
 </div><!-- /titlediv -->
+
 <?php
 }
 /**
@@ -628,6 +657,7 @@ if ( post_type_supports($post_type, 'editor') ) {
 		'resize' => false,
 		'wp_autoresize_on' => $_wp_editor_expand,
 		'add_unload_trigger' => false,
+		'wp_keep_scroll_position' => ! $is_IE,
 	),
 ) ); ?>
 <table id="post-status-info"><tbody><tr>
@@ -749,7 +779,8 @@ if ( post_type_supports( $post_type, 'comments' ) )
 	wp_comment_reply();
 ?>
 
-<?php if ( ! wp_is_mobile() && post_type_supports( $post_type, 'title' ) && '' === $post->post_title ) : ?>
+<?php if ( ! wp_is_mobile() && post_type_supports( $post_type, 'title' ) && '' === $post->post_title) : ?>
+
 <script type="text/javascript">
 try{document.post.title.focus();}catch(e){}
 </script>

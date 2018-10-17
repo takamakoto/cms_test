@@ -11,7 +11,6 @@
  *
  * Manipulates $_POST directly.
  *
- * @package WordPress
  * @since 2.6.0
  *
  * @param bool $update Are we updating a pre-existing post?
@@ -39,6 +38,9 @@ function _wp_translate_postdata( $update = false, $post_data = null ) {
 		else
 			return new WP_Error( 'edit_others_posts', __( 'Sorry, you are not allowed to create posts as this user.' ) );
 	}
+
+	if ( isset( $post_data['post_email'] ) )
+		$post_data['post_email'] = $post_data['post_email'];
 
 	if ( isset( $post_data['content'] ) )
 		$post_data['post_content'] = $post_data['content'];
@@ -378,7 +380,7 @@ function edit_post( $post_data = null ) {
 	$success = wp_update_post( $post_data );
 	// If the save failed, see if we can sanity check the main fields and try again
 	if ( ! $success && is_callable( array( $wpdb, 'strip_invalid_text_for_column' ) ) ) {
-		$fields = array( 'post_title', 'post_content', 'post_excerpt' );
+		$fields = array( 'post_title', 'post_email', 'post_content', 'post_excerpt' );
 
 		foreach ( $fields as $field ) {
 			if ( isset( $post_data[ $field ] ) ) {
@@ -565,6 +567,11 @@ function bulk_edit_posts( $post_data = null ) {
 			continue;
 		}
 
+		if ( isset( $post_data['post_format'] ) ) {
+			set_post_format( $post_ID, $post_data['post_format'] );
+			unset( $post_data['tax_input']['post_format'] );
+		}
+
 		$updated[] = wp_update_post( $post_data );
 
 		if ( isset( $post_data['sticky'] ) && current_user_can( $ptype->cap->edit_others_posts ) ) {
@@ -573,9 +580,6 @@ function bulk_edit_posts( $post_data = null ) {
 			else
 				unstick_post( $post_ID );
 		}
-
-		if ( isset( $post_data['post_format'] ) )
-			set_post_format( $post_ID, $post_data['post_format'] );
 	}
 
 	return array( 'updated' => $updated, 'skipped' => $skipped, 'locked' => $locked );
@@ -594,6 +598,10 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	$post_title = '';
 	if ( !empty( $_REQUEST['post_title'] ) )
 		$post_title = esc_html( wp_unslash( $_REQUEST['post_title'] ));
+
+	// $post_email = '';
+	// if ( !empty( $_REQUEST['post_email'] ) )
+	// 	$post_email = esc_html( wp_unslash( $_REQUEST['post_email'] ));
 
 	$post_content = '';
 	if ( !empty( $_REQUEST['content'] ) )
@@ -616,6 +624,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 		$post->post_date_gmt = '';
 		$post->post_password = '';
 		$post->post_name = '';
+		$post->post_email = '';
 		$post->post_type = $post_type;
 		$post->post_status = 'draft';
 		$post->to_ping = '';
@@ -649,7 +658,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	 * @param WP_Post $post       Post object.
 	 */
 	$post->post_title = apply_filters( 'default_title', $post_title, $post );
-
+	$post->post_email = apply_filters( 'default_email', $post_email, $post );
 	/**
 	 * Filters the default post excerpt initially used in the "Write Post" form.
 	 *
@@ -659,7 +668,7 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
 	 * @param WP_Post $post         Post object.
 	 */
 	$post->post_excerpt = apply_filters( 'default_excerpt', $post_excerpt, $post );
-
+	
 	return $post;
 }
 
@@ -675,10 +684,11 @@ function get_default_post_to_edit( $post_type = 'post', $create_in_db = false ) 
  * @param string $date Optional post date
  * @return int Post ID if post exists, 0 otherwise.
  */
-function post_exists($title, $content = '', $date = '') {
+function post_exists($title, $email, $content = '', $date = '') {
 	global $wpdb;
 
 	$post_title = wp_unslash( sanitize_post_field( 'post_title', $title, 0, 'db' ) );
+	$post_email = wp_unslash( sanitize_post_field( 'post_email', $email, 0, 'db' ) );
 	$post_content = wp_unslash( sanitize_post_field( 'post_content', $content, 0, 'db' ) );
 	$post_date = wp_unslash( sanitize_post_field( 'post_date', $date, 0, 'db' ) );
 
@@ -693,6 +703,11 @@ function post_exists($title, $content = '', $date = '') {
 	if ( !empty ( $title ) ) {
 		$query .= ' AND post_title = %s';
 		$args[] = $post_title;
+	}
+
+	if ( !empty ( $email ) ) {
+		$query .= ' AND post_email = %s';
+		$args[] = $post_email;
 	}
 
 	if ( !empty ( $content ) ) {
@@ -1146,6 +1161,10 @@ function wp_edit_attachments_query_vars( $q = false ) {
 		$q['post_parent'] = 0;
 	}
 
+	if ( isset( $q['mine'] ) || ( isset( $q['attachment-filter'] ) && 'mine' == $q['attachment-filter'] ) ) {
+		$q['author'] = get_current_user_id();
+	}
+
 	// Filter query clauses to include filenames.
 	if ( isset( $q['s'] ) ) {
 		add_filter( 'posts_clauses', '_filter_query_attachment_filenames' );
@@ -1594,9 +1613,13 @@ function _admin_notice_post_locked() {
 		<div class="post-locked-avatar"><?php echo get_avatar( $user->ID, 64 ); ?></div>
 		<p class="currently-editing wp-tab-first" tabindex="0">
 		<?php
-			_e( 'This content is currently locked.' );
-			if ( $override )
-				printf( ' ' . __( 'If you take over, %s will be blocked from continuing to edit.' ), esc_html( $user->display_name ) );
+			if ( $override ) {
+				/* translators: %s: user's display name */
+				printf( __( '%s is already editing this post. Do you want to take over?' ), esc_html( $user->display_name ) );
+			} else {
+				/* translators: %s: user's display name */
+				printf( __( '%s is already editing this post.' ), esc_html( $user->display_name ) );
+			}
 		?>
 		</p>
 		<?php
@@ -1660,8 +1683,6 @@ function _admin_notice_post_locked() {
 /**
  * Creates autosave data for the specified post from $_POST data.
  *
- * @package WordPress
- * @subpackage Post_Revisions
  * @since 2.6.0
  *
  * @param mixed $post_data Associative array containing the post data or int post ID.
@@ -1722,12 +1743,11 @@ function wp_create_post_autosave( $post_data ) {
 }
 
 /**
- * Save draft or manually autosave for showing preview.
+ * Saves a draft or manually autosaves for the purpose of showing a post preview.
  *
- * @package WordPress
  * @since 2.7.0
  *
- * @return str URL to redirect to show the preview
+ * @return string URL to redirect to show the preview.
  */
 function post_preview() {
 
