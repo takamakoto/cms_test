@@ -1,0 +1,123 @@
+/*
+Theme Name: Flatsome Child
+Description: This is a child theme for Flatsome Theme
+Author: UX Themes
+Template: flatsome
+Version: 3.0
+*/
+
+/*************** ADD CUSTOM CSS HERE.   ***************/
+
+
+@media only screen and (max-width: 48em) {
+    /*************** ADD MOBILE ONLY CSS HERE  ***************/
+
+
+}
+
+/*ESC product price */
+span.amount{
+    color: #ff0000;
+}
+
+
+
+/*-------------------------------------------------------------------------------*/
+
+/*trang  tin tuc*/
+.page-title {
+    display: none;
+}
+
+
+
+/*product sidebar*/
+/*-------------------------------------------------------------------------------*/
+
+.widget .current-cat>a{
+    color: #096;
+    font-weight: bolder;
+}
+
+
+/*-------------------------------------------------------------------------------*/
+/*ho tro*/
+.ho-tro-truc-tuyen {
+    padding-left: 10px;
+}
+.ho-tro-truc-tuyen p {
+    font-weight: 1000;
+}
+.ho-tro-truc-tuyen p a {
+    color: #ff6600;
+    font-weight: 100;
+}
+.ho-tro-truc-tuyen p a:hover {
+    color: #66cc33;
+    font-weight: 100;
+}
+.sidebar-sanpham .title {
+    text-align: center;
+}
+.ho-tro-ky-thuat{
+    border: 1px solid #66cc33;
+    border-top: 1px solid #66cc33;
+    border-radius: 5px;
+    padding: 10px;
+}
+.sidebar-hotro-title{
+    text-align: center;
+}
+/*-------------------------------------------------------------------------------*/
+/*danh muc san pham*/
+.widget_product_categories{
+    border: 1px solid #66cc33;
+    border-top: 1px solid #66cc33;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding: 10px;
+    text-align: center;
+}
+.widget_product_categories ul li a:hover {
+    background: #66cc33;
+    color: #FFFFFF;
+    font-weight: bold;
+    border-radius: 5px; 
+}
+.widget_product_categories ul li a {
+    display: block;
+    padding: 5px 5px;
+    font-size: 16px;
+}
+.widget_product_categories ul li {
+    width: 90%;
+    text-align: justify;
+    margin-bottom: .6em;
+  
+}
+.widget-title{
+    color: #ff6600;
+}
+.is-divider{
+    display: none;
+}
+.product-categories{
+    margin-top: 15px!important;
+}
+
+.dark a:hover, .dark .widget a:hover {
+    color: #906009;
+}
+.nav-dropdown-bold .nav-column li>a, .nav-dropdown.nav-dropdown-bold>li>a:active
+{
+	background: #ff6600;
+}
+
+
+.login h1 a {
+body.login {background:#008800}
+}
+
+
+
+

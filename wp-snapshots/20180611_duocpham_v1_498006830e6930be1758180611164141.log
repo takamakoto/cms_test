@@ -1,0 +1,80 @@
+********************************************************************************
+DUPLICATOR-LITE PACKAGE-LOG: 11 June, 2018 4:42 pm
+NOTICE: Do NOT post to public sites or forums 
+********************************************************************************
+VERSION:	1.2.40
+WORDPRESS:	4.9.6
+PHP INFO:	5.6.36 | SAPI: apache2handler
+SERVER:		Apache/2.4.33 (Win32) OpenSSL/1.0.2o PHP/5.6.36 
+PHP TIME LIMIT: (0) no time limit imposed 
+PHP MAX MEMORY: 2048M (256M default) 
+MEMORY STACK: 46.25MB 
+
+********************************************************************************
+DATABASE:
+********************************************************************************
+BUILD MODE:   MYSQLDUMP
+MYSQLTIMEOUT: 5000
+MYSQLDUMP:    Is Supported 
+FILTERED: [] 
+RESPONSE: Ran from C:/xampp/mysql/bin/mysqldump.exe 
+TABLES: total:29 | filtered:0 | create:29 
+SQL CREATED: 20180611_duocpham_v1_498006830e6930be1758180611164141_database.sql 
+SQL FILE SIZE: 1.26MB (1316912) 
+SQL FILE TIME: 2018-06-11 16:42:09 
+SQL RUNTIME: 0.57 sec. 
+
+******************************************************************************** 
+ARCHIVE (ZIP): 
+******************************************************************************** 
+ARCHIVE DIR:  C:/xampp/htdocs/duoc 
+ARCHIVE FILE: 20180611_duocpham_v1_498006830e6930be1758180611164141_archive.zip 
+FILTERS: *OFF* 
+DIRS:
+	not set 
+FILES:
+	not set 
+EXTS:  not set 
+---------------------------------------- 
+COMPRESSING 
+SIZE:	120.35MB 
+STATS:	Dirs 1,112 | Files 9,137 
+SQL ADDED: 20180611_duocpham_v1_498006830e6930be1758180611164141_database.sql 
+ZipArchive Object
+(
+    [status] => 0
+    [statusSys] => 0
+    [numFiles] => 10249
+    [filename] => C:\xampp\htdocs\duoc\wp-snapshots\tmp\20180611_duocpham_v1_498006830e6930be1758180611164141_archive.zip
+    [comment] => 
+)
+ 
+COMPRESSION RESULT: '1' 
+COMPRESSED SIZE: 50.76MB 
+ARCHIVE RUNTIME: 81.71 sec. 
+MEMORY STACK: 49.25MB 
+
+******************************************************************************** 
+MAKE INSTALLER: 
+******************************************************************************** 
+Build Start 
+Build Finished 
+Preping for use 
+PACK SIZE:  
+Template parsed with new data 
+Complete [C:/xampp/htdocs/duoc/wp-snapshots/tmp/20180611_duocpham_v1_498006830e6930be1758180611164141_installer.php] 
+Added to archive 
+
+******************************************************************************** 
+INTEGRITY CHECKS: 
+******************************************************************************** 
+SQL File: 1.26MB 
+Installer File: 445.88KB 
+Archive File: 50.76MB  
+
+********************************************************************************
+RECORD ID:[2]
+TOTAL PROCESS RUNTIME: 83.20 sec.
+PEAK PHP MEMORY USED: 51.25MB
+DONE PROCESSING => 20180611_duocpham_v1 11 June, 2018 4:43 pm
+ 
