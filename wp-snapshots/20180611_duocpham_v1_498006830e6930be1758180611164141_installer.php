@@ -90,7 +90,7 @@ $GLOBALS['FW_VERSION_PHP']	= '5.6.36';
 $GLOBALS['FW_VERSION_OS']	= 'WINNT';
 //GENERAL
 $GLOBALS['FW_TABLEPREFIX']		= 'wp_';
-$GLOBALS['FW_URL_OLD']			= 'http://localhost:82/duoc';
+$GLOBALS['FW_URL_OLD']			= 'http://localhost/duoc';
 $GLOBALS['FW_PACKAGE_NAME']		= '20180611_duocpham_v1_498006830e6930be1758180611164141_archive.zip';
 $GLOBALS['FW_PACKAGE_NOTES']	= '';
 $GLOBALS['FW_PACKAGE_EST_SIZE']	= 53228422;
@@ -104,7 +104,7 @@ $GLOBALS['FW_DBUSER']			= '';
 $GLOBALS['FW_DBPASS']			= '';
 $GLOBALS['FW_BLOGNAME']			= 'Dược Phẩm';
 $GLOBALS['FW_WPROOT']			= 'C:/xampp/htdocs/duoc/';
-$GLOBALS['FW_WPLOGIN_URL']		= 'http://localhost:82/duoc/wp-login.php';
+$GLOBALS['FW_WPLOGIN_URL']		= 'http://localhost/duoc/wp-login.php';
 $GLOBALS['FW_OPTS_DELETE']		= json_decode('["duplicator_ui_view_state","duplicator_package_active","duplicator_settings"]', true);
 $GLOBALS['FW_DUPLICATOR_VERSION'] = '1.2.40';
 $GLOBALS['FW_ARCHIVE_ONLYDB']	= 0;
